@@ -50,6 +50,16 @@ class BookingResponse(BaseModel):
     sheet_sync_status: str
 
 
+@app.get("/")
+async def root():
+    return {
+        "message": "Welcome to Skin Sattva API",
+        "docs": "/docs",
+        "health": "/api/health",
+        "bookings": "/api/bookings"
+    }
+
+
 @app.get("/api/health")
 async def health_check():
     return {"status": "healthy", "service": "Skin Sattva API"}
