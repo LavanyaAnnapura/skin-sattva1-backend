@@ -5,6 +5,9 @@ services:
     plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: python start.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11"
 
 databases:
   - name: skin-sattva-db
