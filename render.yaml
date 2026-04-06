@@ -1,16 +1,12 @@
 services:
   - type: web
     name: skin-sattva-backend
-    runtime: python3
+    env: python
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: python start.py
-    envVars:
-      - key: PORT
-        value: 10000
-      - key: PYTHON_VERSION
-        value: 3.11.0
 
-  - type: pserv
-    name: skin-sattva-db
-    runtime: postgres
-    ipAllowList: []  # Only accessible by other services in this project
+databases:
+  - name: skin-sattva-db
+    plan: free
+    databaseName: skin_sattva_db
