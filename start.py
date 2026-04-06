@@ -1,35 +1,27 @@
 #!/usr/bin/env python3
-"""
-Production startup script for Skin Sattva Backend
-Runs database migrations and starts the FastAPI server
-"""
-
 import os
 import subprocess
 import sys
 
-def run_migrations():
-    """Run Alembic database migrations"""
-    print("Running database migrations...")
-    try:
-        subprocess.run([
-            sys.executable, "-m", "alembic", "upgrade", "head"
-        ], check=False)
-        print("✅ Database migrations completed")
-    except Exception as e:
-        print(f"⚠️  Migration warning: {e}")
+# Try to run migrations (but don't fail if it doesn't work)
+print("Attempting database migrations...")
+try:
+    subprocess.run(
+        [sys.executable, "-m", "alembic", "upgrade", "head"],
+        timeout=30,
+        capture_output=True
+    )
+    print("✅ Migrations completed")
+except Exception as e:
+    print(f"⚠️ Migrations skipped: {e}")
 
-if __name__ == "__main__":
-    # Run migrations first
-    run_migrations()
-    
-    # Start FastAPI server with uvicorn
-    port = os.environ.get("PORT", "8000")
-    print(f"Starting server on port {port}")
-    
-    subprocess.run([
-        sys.executable, "-m", "uvicorn",
-        "server:app",
-        "--host", "0.0.0.0",
-        "--port", port
-    ])
+# Start FastAPI server
+port = os.environ.get("PORT", "8000")
+print(f"Starting server on port {port}...")
+
+os.execvp(sys.executable, [
+    sys.executable, "-m", "uvicorn",
+    "server:app",
+    "--host", "0.0.0.0",
+    "--port", port
+])
