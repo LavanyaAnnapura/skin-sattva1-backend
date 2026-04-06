@@ -129,3 +129,14 @@ async def get_bookings(db: AsyncSession = Depends(get_db)):
         )
         for b in bookings
     ]
+
+
+# Production server startup
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        "server:app",
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 8000)),
+        reload=False
+    )
